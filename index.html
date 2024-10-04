@@ -107,6 +107,7 @@
             max-width: 800px;
             border-radius: 10px;
             text-align: center;
+            position: relative; /* Added position relative for watermark */
         }
 
         #close {
@@ -149,6 +150,19 @@
         .share-buttons img {
             width: 40px;
             height: 40px;
+        }
+
+        /* Watermark style */
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem; /* Adjust size as needed */
+            color: rgba(0, 0, 0, 0.1); /* Light gray color for the watermark */
+            pointer-events: none; /* Make sure the watermark does not interfere with clicks */
+            font-weight: bold;
+            white-space: nowrap; /* Prevent line breaks */
         }
 
         /* Responsive adjustments */
@@ -211,108 +225,101 @@
                     Congratulations, <span id="userNameDisplay">{userName}</span>!<br>You won <span class="reward">₹{reward}.00</span> 🎉<br>
                     <span class="hindi-text">मैंने <span id="userNameDisplay">{userName}</span> ने बाबा साईं कृपा सोसायटी में सदस्य जोड़कर नकद इनाम जीता है। आप भी आज ही सदस्य जोड़ें और योजना का लाभ उठाएं। और पाएं ₹200 से ₹1100 जीतने का मौका।</span>
                 </p>
+                <!-- Watermark -->
+                <div class="watermark">पहले सदस्य जोड़े </div>
                 <div class="share-buttons">
                     <a id="whatsapp-share" href="#" target="_blank" aria-label="Share on WhatsApp">
                         <img src="https://github.com/bskcs/Win-Prize/blob/main/Whatsapp.png?raw=true" alt="Share on WhatsApp">
                     </a>
-                    <a id="facebook-share" href="https://www.facebook.com/sharer/sharer.php?u=YOUR_URL_HERE" target="_blank" aria-label="Share on Facebook">
-                        <img src="https://github.com/bskcs/Win-Prize/blob/main/Facebook_Logo.png?raw=true" alt="Share on Facebook">
+                    <a id="facebook-share" href="#" target="_blank" aria-label="Share on Facebook">
+                        <img src="https://github.com/bskcs/Win-Prize/blob/main/Facebook.png?raw=true" alt="Share on Facebook">
                     </a>
-                    <a id="instagram-share" href="https://www.instagram.com/" target="_blank" aria-label="Share on Instagram">
-                        <img src="https://github.com/bskcs/Win-Prize/blob/main/Instagram_icon.png?raw=true" alt="Share on Instagram">
+                    <a id="instagram-share" href="#" target="_blank" aria-label="Share on Instagram">
+                        <img src="https://github.com/bskcs/Win-Prize/blob/main/Instagram.png?raw=true" alt="Share on Instagram">
                     </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
-        // Show the game section only after the user agrees to T&C
-        document.getElementById('agreeButton').addEventListener('click', function() {
-            document.getElementById('tc-container').style.display = 'none';  // Hide T&C
-            document.getElementById('game-section').style.display = 'block';  // Show game section
-        });
+        // Show game section after agreeing to terms
+        document.getElementById('agreeButton').onclick = function() {
+            document.getElementById('tc-container').style.display = 'none';
+            document.getElementById('game-section').style.display = 'block';
+        }
 
-        // Start the game by validating and hiding the name input section
         function startGame() {
-            const userName = document.getElementById('userName').value.trim();
+            const userName = document.getElementById('userName').value;
             if (userName) {
-                document.getElementById('name-section').style.display = 'none';
+                document.getElementById('userNameDisplay').innerText = userName;
                 document.getElementById('reward-section').style.display = 'block';
             } else {
-                alert('Please enter your name!');
+                alert('Please enter your name to start the game.');
             }
         }
 
-        // Reward generation function with distribution logic
         function generateReward() {
-            document.getElementById('clickButton').disabled = true;
-            let reward;
-
-            // Generate a random number between 1 and 100 to determine the reward range
-            let randomPercentage = Math.random() * 100;
-
-            if (randomPercentage < 82) { // 82% chance for ₹201 to ₹325
-                reward = Math.floor(Math.random() * (525 - 201 + 1)) + 201;
-            } else if (randomPercentage < 95) { // 15% chance for ₹326 to ₹500
-                reward = Math.floor(Math.random() * (500 - 526 + 1)) + 526;
-            } else { // 3% chance for ₹501 to ₹1100
-                reward = Math.floor(Math.random() * (1100 - 501 + 1)) + 501;
-            }
-
-            // Get the user name
-            const userName = document.getElementById('userName').value.trim();
-
-            // Update modal content
-            document.getElementById('modal-text').innerHTML = `Congratulations, <span id="userNameDisplay">${userName}</span>!<br>You won <span class="reward">₹${reward}.00</span> 🎉<br> <span class="hindi-text">मैंने बाबा साईं कृपा सोसायटी में सदस्य जोड़कर नकद इनाम जीता है। आप भी आज ही सदस्य जोड़ें और योजना का लाभ उठाएं। और पाएं ₹200 से ₹1100 जीतने का मौका।</span>`;
-            
-            // Update share links
-            document.getElementById('whatsapp-share').href = `https://api.whatsapp.com/send?text=मैंने ${userName} ने बाबा साईं कृपा सोसायटी में सदस्य जोड़कर ₹${reward}.00 का नकद इनाम जीता है। आप भी आज ही सदस्य जोड़ें और योजना का लाभ उठाएं। और पाएं ₹200 से ₹1100 जीतने का मौका।`;
-            document.getElementById('facebook-share').href = `https://www.facebook.com/sharer/sharer.php?u=YOUR_URL_HERE&quote=मैंने ${userName} ने बाबा साईं कृपा सोसायटी में सदस्य जोड़कर ₹${reward}.00 का नकद इनाम जीता है। आप भी आज ही सदस्य जोड़ें और योजना का लाभ उठाएं। और पाएं ₹200 से ₹1100 जीतने का मौका।`;
-            document.getElementById('instagram-share').href = `https://www.instagram.com/`; // Instagram doesn’t support direct sharing links with text. Use Instagram app for sharing.
-
+            const reward = getRandomReward();
+            document.getElementById('result').innerText = `You won ₹${reward}! 🎉`;
             document.getElementById('modal').style.display = 'block';
-
-            // Play cheer sound
-            const cheerSound = new Audio('https://github.com/bskcs/Win-Prize/raw/main/Cheer.mp3'); // Correct path to your cheer sound file
-            cheerSound.loop = true;
-
-            cheerSound.oncanplaythrough = () => {
-                cheerSound.play();
-            };
-
-            cheerSound.onerror = (e) => {
-                console.error('Error loading audio:', e);
-            };
-
-            // Loop confetti animation
-            function startConfetti() {
-                window.confetti({
-                    particleCount: 200,
-                    spread: 70,
-                    origin: { y: 0.6 }
-                });
-                setTimeout(startConfetti, 1000); // Repeat every 1 second
-            }
-            startConfetti();
+            document.getElementById('modal-text').innerHTML = `
+                Congratulations, <span id="userNameDisplay">${document.getElementById('userName').value}</span>!<br>You won <span class="reward">₹${reward}.00</span> 🎉<br>
+                <span class="hindi-text">मैंने <span id="userNameDisplay">${document.getElementById('userName').value}</span> ने बाबा साईं कृपा सोसायटी में सदस्य जोड़कर नकद इनाम जीता है। आप भी आज ही सदस्य जोड़ें और योजना का लाभ उठाएं। और पाएं ₹200 से ₹1100 जीतने का मौका।</span>
+            `;
+            disableClickButton(); // Disable the button after clicking
         }
 
-        // Close modal and stop confetti and sound
+        function getRandomReward() {
+            const random = Math.random();
+            let reward;
+            if (random < 0.80) {
+                reward = Math.floor(Math.random() * (301 - 201 + 1)) + 201; // ₹201 to ₹301
+            } else if (random < 0.97) {
+                reward = Math.floor(Math.random() * (501 - 301 + 1)) + 301; // ₹301 to ₹501
+            } else {
+                reward = Math.floor(Math.random() * (1101 - 502 + 1)) + 502; // ₹502 to ₹1101
+            }
+            return reward;
+        }
+
+        function disableClickButton() {
+            const button = document.getElementById('clickButton');
+            button.disabled = true; // Disable the button
+            button.style.backgroundColor = '#ccc'; // Change button color to indicate it's disabled
+        }
+
+        // Close modal
         document.getElementById('close').onclick = function() {
             document.getElementById('modal').style.display = 'none';
-            cheerSound.pause(); // Stop the cheer sound
-            cheerSound.currentTime = 0; // Reset the sound to the start
-        };
+        }
 
-        // Close modal if clicked outside of the modal content
+        // Close modal when clicking outside of it
         window.onclick = function(event) {
-            if (event.target == document.getElementById('modal')) {
-                document.getElementById('modal').style.display = 'none';
-                cheerSound.pause(); // Stop the cheer sound
-                cheerSound.currentTime = 0; // Reset the sound to the start
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
             }
-        };
+        }
+
+        // Update share links with the user's name and reward
+        document.getElementById('whatsapp-share').onclick = function() {
+            const userName = document.getElementById('userName').value;
+            const reward = getRandomReward();
+            const whatsappMessage = `Congratulations, ${userName}! You won ₹${reward}. Join now and get a chance to win too!`;
+            this.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappMessage)}`;
+        }
+
+        document.getElementById('facebook-share').onclick = function() {
+            const userName = document.getElementById('userName').value;
+            const reward = getRandomReward();
+            const facebookMessage = `Congratulations, ${userName}! You won ₹${reward}. Join now and get a chance to win too!`;
+            this.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(facebookMessage)}`;
+        }
+
+        document.getElementById('instagram-share').onclick = function() {
+            alert('Instagram sharing is currently not supported in this demo.');
+        }
     </script>
 </body>
 </html>
