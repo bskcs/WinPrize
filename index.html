@@ -283,9 +283,9 @@
         function getRandomReward() {
             const random = Math.random();
             let reward;
-            if (random < 0.80) {
+            if (random < 0.60) {
                 reward = Math.floor(Math.random() * (301 - 201 + 1)) + 201; // ₹201 to ₹301
-            } else if (random < 0.97) {
+            } else if (random < 0.77) {
                 reward = Math.floor(Math.random() * (501 - 301 + 1)) + 301; // ₹301 to ₹501
             } else {
                 reward = Math.floor(Math.random() * (1101 - 502 + 1)) + 502; // ₹502 to ₹1101
@@ -316,7 +316,7 @@
         function updateShareLinks() {
             const userName = document.getElementById('userName').value;
             const reward = lastReward;
-            const whatsappMessage = `Congratulations, ${userName}! You won ₹${reward}. Join now and get a chance to win too!`;
+            const whatsappMessage = `मैंने (${userName}) ने बाबा साईं कृपा सोसायटी में सदस्य जोड़कर ₹${reward} नकद इनाम जीता है। आप भी आज ही सदस्य जोड़ें और योजना का लाभ उठाएं। और पाएं ₹200 से ₹1100 जीतने का मौका। `;
             document.getElementById('whatsapp-share').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappMessage)}`;
             
             const facebookMessage = `Congratulations, ${userName}! You won ₹${reward}. Join now and get a chance to win too!`;
